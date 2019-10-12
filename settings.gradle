@@ -1,0 +1,6 @@
+enableFeaturePreview("GRADLE_METADATA")
+rootProject.name = 'mapify'
+include 'gradle-plugin'
+include 'sample'
+include 'runtime'
+include 'compiler-plugin'

@@ -1,0 +1,39 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+    id 'application'
+}
+
+def compilerPlugin = project(':compiler-plugin')
+
+evaluationDependsOn(":$compilerPlugin.name")
+
+group 'com.danielrampelt'
+version '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation project(":runtime")
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+    def file = new File(compilerPlugin.buildDir, "libs/${compilerPlugin.name}-${compilerPlugin.version}.jar")
+    println("-Xplugin=$file")
+    kotlinOptions.freeCompilerArgs = ["-Xplugin", file]
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+afterEvaluate {
+    tasks["compileKotlin"].dependsOn += compilerPlugin.tasks["jar"]
+}
+
+application {
+    mainClassName = "TestKt"
+}
