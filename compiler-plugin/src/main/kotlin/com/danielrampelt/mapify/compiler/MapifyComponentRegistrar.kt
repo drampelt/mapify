@@ -1,6 +1,6 @@
 package com.danielrampelt.mapify.compiler
 
-import com.danielrampelt.mapify.compiler.jvm.MapifyInterceptor
+import com.danielrampelt.mapify.compiler.jvm.MapifyInterceptorExtension
 import com.google.auto.service.AutoService
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -16,7 +16,7 @@ class MapifyComponentRegistrar : ComponentRegistrar {
         val messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
         messageCollector.report(CompilerMessageSeverity.INFO, "Mapify plugin is active", null)
         ClassBuilderInterceptorExtension.registerExtension(project,
-            MapifyInterceptor(messageCollector, configuration)
+            MapifyInterceptorExtension(messageCollector, configuration)
         )
     }
 }

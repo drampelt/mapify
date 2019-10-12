@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticSink
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 
-internal class MapifyInterceptor(
+internal class MapifyInterceptorExtension(
     private val messageCollector: MessageCollector,
     private val compilerConfiguration: CompilerConfiguration
 ) : ClassBuilderInterceptorExtension {
