@@ -2,10 +2,14 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="com.danielrampelt.sample.jvmMain" target="1.6" />
+      <module name="com.danielrampelt.sample.jvmTest" target="1.6" />
       <module name="kotlin-map.kotlin-map-gradle.main" target="1.8" />
       <module name="kotlin-map.kotlin-map-gradle.test" target="1.8" />
       <module name="kotlin-map.kotlin-map-sample.main" target="1.8" />
       <module name="kotlin-map.kotlin-map-sample.test" target="1.8" />
+      <module name="kotlin-map.sample.main" target="1.8" />
+      <module name="kotlin-map.sample.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

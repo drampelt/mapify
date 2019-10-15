@@ -5,7 +5,7 @@ plugins {
 
 apply plugin: 'kotlin-kapt'
 
-group 'com.danielrampelt'
+group 'com.danielrampelt.mapify'
 version '0.1-SNAPSHOT'
 
 repositories {

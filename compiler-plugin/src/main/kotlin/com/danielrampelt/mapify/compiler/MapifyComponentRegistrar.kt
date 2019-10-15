@@ -15,8 +15,6 @@ class MapifyComponentRegistrar : ComponentRegistrar {
     override fun registerProjectComponents(project: MockProject, configuration: CompilerConfiguration) {
         val messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
         messageCollector.report(CompilerMessageSeverity.INFO, "Mapify plugin is active", null)
-        ClassBuilderInterceptorExtension.registerExtension(project,
-            MapifyInterceptorExtension(messageCollector, configuration)
-        )
+        ClassBuilderInterceptorExtension.registerExtension(project, MapifyInterceptorExtension(messageCollector, configuration))
     }
 }

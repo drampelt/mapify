@@ -1,39 +1,56 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
-    id 'application'
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.50'
 }
 
 def compilerPlugin = project(':compiler-plugin')
 
 evaluationDependsOn(":$compilerPlugin.name")
 
-group 'com.danielrampelt'
-version '0.1-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions {
+                def pluginJar = new File(compilerPlugin.buildDir, "libs/${compilerPlugin.name}-${compilerPlugin.version}.jar")
+                freeCompilerArgs = ["-Xplugin", pluginJar.absolutePath]
+            }
+        }
+    }
+    macosX64()
 
-    implementation project(":runtime")
-}
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+                implementation project(":runtime")
+            }
+        }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-    def file = new File(compilerPlugin.buildDir, "libs/${compilerPlugin.name}-${compilerPlugin.version}.jar")
-    println("-Xplugin=$file")
-    kotlinOptions.freeCompilerArgs = ["-Xplugin", file]
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib-jdk8')
+            }
+        }
+
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+    }
 }
 
 afterEvaluate {
-    tasks["compileKotlin"].dependsOn += compilerPlugin.tasks["jar"]
+    tasks["compileKotlinJvm"].dependsOn += compilerPlugin.tasks["jar"]
 }
 
-application {
-    mainClassName = "TestKt"
-}
