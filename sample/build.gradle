@@ -3,8 +3,10 @@ plugins {
 }
 
 def compilerPlugin = project(':compiler-plugin')
+def compilerPluginNative = project(':compiler-plugin-native')
 
 evaluationDependsOn(":$compilerPlugin.name")
+evaluationDependsOn(":$compilerPluginNative.name")
 
 repositories {
     mavenCentral()
@@ -19,7 +21,14 @@ kotlin {
             }
         }
     }
-    macosX64()
+    macosX64("macos") {
+        compilations.all {
+            kotlinOptions {
+                def pluginJar = new File(compilerPluginNative.buildDir, "libs/${compilerPluginNative.name}-${compilerPluginNative.version}.jar")
+                freeCompilerArgs = ["-Xplugin", pluginJar.absolutePath]
+            }
+        }
+    }
 
     sourceSets {
         commonMain {
@@ -52,5 +61,6 @@ kotlin {
 
 afterEvaluate {
     tasks["compileKotlinJvm"].dependsOn += compilerPlugin.tasks["jar"]
+    tasks["compileKotlinMacos"].dependsOn += compilerPluginNative.tasks["jar"]
 }
 
