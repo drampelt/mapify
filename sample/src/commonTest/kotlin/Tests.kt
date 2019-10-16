@@ -12,19 +12,19 @@ class Tests {
     fun normalMap() {
         val domainUser = networkUser.normalMapToDomain()
         println("Domain: $domainUser")
-        assertEquals(domainUser.id, null)
-        assertEquals(domainUser.name, "")
-        assertEquals(domainUser.email, "")
-        assertEquals(domainUser.isVerified, false)
+        assertEquals(null, domainUser.id)
+        assertEquals("", domainUser.name)
+        assertEquals("", domainUser.email)
+        assertEquals(false, domainUser.isVerified)
     }
 
     @Test
     fun mapifyMap() {
         val domainUser = networkUser.mapToDomain()
         println("Domain: $domainUser")
-        assertEquals(domainUser.id, null)
-        assertEquals(domainUser.name, "testing")
-        assertEquals(domainUser.email, "bob@smith.com")
-        assertEquals(domainUser.isVerified, false)
+        assertEquals(null, domainUser.id)
+        assertEquals("testing", domainUser.name)
+        assertEquals("bob@smith.com", domainUser.email)
+        assertEquals(false, domainUser.isVerified)
     }
 }
