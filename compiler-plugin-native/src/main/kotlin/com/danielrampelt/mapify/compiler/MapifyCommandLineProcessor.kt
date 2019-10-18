@@ -6,6 +6,6 @@ import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
 
 @AutoService(CommandLineProcessor::class)
 class MapifyCommandLineProcessor : CommandLineProcessor {
-    override val pluginId: String = "kotlin-map"
+    override val pluginId: String = "mapify"
     override val pluginOptions: Collection<AbstractCliOption> = listOf()
 }
