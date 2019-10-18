@@ -1,4 +1,4 @@
-package com.danielrampelt.mapify
+package com.danielrampelt.mapify.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

@@ -5,9 +5,6 @@ plugins {
 
 apply plugin: 'kotlin-kapt'
 
-group 'com.danielrampelt.mapify'
-version '0.1-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }
@@ -34,4 +31,12 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+publishing {
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
 }

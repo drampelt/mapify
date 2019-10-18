@@ -4,8 +4,6 @@ plugins {
 repositories {
     mavenCentral()
 }
-group 'com.danielrampelt.mapify'
-version '0.1.0-SNAPSHOT'
 
 apply plugin: 'maven-publish'
 
