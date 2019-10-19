@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.types.typeUtil.isChar
 import org.jetbrains.kotlin.types.typeUtil.isDouble
 import org.jetbrains.kotlin.types.typeUtil.isFloat
 import org.jetbrains.kotlin.types.typeUtil.isInt
+import org.jetbrains.kotlin.types.typeUtil.isInterface
 import org.jetbrains.kotlin.types.typeUtil.isLong
 import org.jetbrains.kotlin.types.typeUtil.isShort
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toUpperCaseAsciiOnly
@@ -121,7 +122,8 @@ internal class MapifyClassBuilder(
                             messageCollector.report(CompilerMessageSeverity.INFO, "Got property or getter $matchingMember")
                             val functionName = if (matchingMember is FunctionDescriptor) matchingMember.name.identifier else getterName
                             copyInstructions.add(VarInsnNode(Opcodes.ALOAD, receiverIndex))
-                            copyInstructions.add(MethodInsnNode(Opcodes.INVOKEVIRTUAL, receiverTypeAsm.internalName, functionName, "()${typeAsm.descriptor}", false))
+                            val opCode = if (receiverType.isInterface()) Opcodes.INVOKEINTERFACE else Opcodes.INVOKEVIRTUAL
+                            copyInstructions.add(MethodInsnNode(opCode, receiverTypeAsm.internalName, functionName, "()${typeAsm.descriptor}", receiverType.isInterface()))
                         } else {
                             messageCollector.report(CompilerMessageSeverity.INFO, "Could not find matching property or getter for parameter $parameterName, skipping")
                             skip = true
