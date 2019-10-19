@@ -11,11 +11,11 @@ import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.impl.AbstractClassDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
-import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 import org.jetbrains.kotlin.types.typeUtil.isBoolean
 import org.jetbrains.kotlin.types.typeUtil.isByte
 import org.jetbrains.kotlin.types.typeUtil.isChar
@@ -68,7 +68,7 @@ internal class MapifyClassBuilder(
 
         val returnTypeAsm = returnType.asmType(typeMapper)
         messageCollector.report(CompilerMessageSeverity.INFO, "Return type: ${returnTypeAsm.className}")
-        val returnTypeClass = returnType.constructor.declarationDescriptor as? LazyClassDescriptor
+        val returnTypeClass = returnType.constructor.declarationDescriptor as? AbstractClassDescriptor
         if (returnTypeClass == null || !returnTypeClass.isData) {
             messageCollector.report(CompilerMessageSeverity.ERROR, "Mapper must return a kotlin data class")
             return original
