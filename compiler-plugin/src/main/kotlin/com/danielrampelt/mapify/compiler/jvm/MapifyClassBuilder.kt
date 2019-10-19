@@ -8,10 +8,12 @@ import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
 import org.jetbrains.kotlin.codegen.TransformationMethodVisitor
 import org.jetbrains.kotlin.codegen.asmType
 import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 import org.jetbrains.kotlin.types.typeUtil.isBoolean
@@ -59,8 +61,6 @@ internal class MapifyClassBuilder(
             .also { messageCollector.report(CompilerMessageSeverity.ERROR, "Mapper input can currently only be receiver parameters") }
         val receiverType = receiver.type
         val receiverTypeAsm = receiverType.asmType(typeMapper)
-        val receiverTypeClass = receiverType.constructor.declarationDescriptor as? LazyClassDescriptor ?: return original
-            .also { messageCollector.report(CompilerMessageSeverity.ERROR, "Mapper receiver can currently only be a kotlin class") }
         val receiverIndex = function.allParameters.indexOf(receiver)
 
         val returnType = function.returnType ?: return original
@@ -108,7 +108,9 @@ internal class MapifyClassBuilder(
                         val parameterName = parameter.name.identifier
                         val getterName = "get${parameterName.substring(0, 1).toUpperCaseAsciiOnly()}${parameterName.substring(1)}"
                         // TODO: prioritize getters over fields
-                        val matchingMember = receiverTypeClass.declaredCallableMembers.firstOrNull { member ->
+
+                        val matchingMember = DescriptorUtils.getAllDescriptors(receiverType.memberScope).firstOrNull { member ->
+                            if (member !is CallableDescriptor) return@firstOrNull false
                             val nameMatches = member.name.identifier == parameterName || member.name.identifier == getterName
                             val typeMatches = member.returnType == type
                             // TODO: handle primitive boxing
