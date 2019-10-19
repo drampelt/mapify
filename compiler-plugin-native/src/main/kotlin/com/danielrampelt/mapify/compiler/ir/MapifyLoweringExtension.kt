@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.ir.declarations.IrFunction
 import org.jetbrains.kotlin.ir.expressions.IrConstructorCall
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.types.getClass
-import org.jetbrains.kotlin.ir.types.impl.originalKotlinType
+import org.jetbrains.kotlin.ir.types.toKotlinType
 import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.util.hasAnnotation
 import org.jetbrains.kotlin.ir.util.properties
@@ -61,7 +61,7 @@ class MapifyLoweringExtension(
                             val allFunctions  = receiverClass.properties.filter { it.getter != null }.map { it.getter!! } + receiverClass.functions
                             val getter = allFunctions.firstOrNull { func ->
                                 val nameMatches = func.name == param.name || func.name.asString() == getterName || (func.correspondingPropertySymbol?.owner?.name == param.name)
-                                val typeMatches = param.type == func.returnType.originalKotlinType
+                                val typeMatches = param.type == func.returnType.toKotlinType()
                                 nameMatches && typeMatches && func.valueParameters.isEmpty()
                             } ?: return@forEachIndexed messageCollector.report(CompilerMessageSeverity.INFO, "Could not find matching property or getter for parameter $parameterName, skipping")
 
